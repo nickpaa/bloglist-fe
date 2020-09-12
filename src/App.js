@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -11,6 +12,8 @@ const App = () => {
   const [author, setAuthor] = useState('')
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
+  const [message, setMessage] = useState(null)
+  const [messageCategory, setMessageCategory] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -27,6 +30,13 @@ const App = () => {
     }
   }, [])
 
+  const clearMessage = () => {
+    setTimeout(() => {
+      setMessage(null)
+      setMessageCategory(null)
+    }, 5000)
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -42,20 +52,29 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      setMessage(`${user.name} successfully logged in`)
+      setMessageCategory('success')
+      clearMessage()
       
     } catch (exception) {
-      console.log('login error')
+      setMessage('incorrect credentials; please try again')
+      setMessageCategory('error')
+      clearMessage()
     }
   }
 
   const handleLogout = async (event) => {
     event.preventDefault()
     try {
-      console.log('signed out', user.name)
+      setMessage(`${user.name} logged out`)
+      setMessageCategory('success')
       window.localStorage.removeItem('loggedBlogAppUser')
       setUser(null)
+      clearMessage()
     } catch (exception) {
-      console.log('logout error')
+      setMessage(`${user.name} not logged out; try again`)
+      setMessageCategory('error')
+      clearMessage()
     }
   }
 
@@ -69,6 +88,10 @@ const App = () => {
 
     const returnedBlog = await blogService.create(blogObject)
     setBlogs(blogs.concat(returnedBlog))
+    setMessage(`new blog ${title} added`)
+    setMessageCategory('success')
+    clearMessage()
+
     setTitle('')
     setAuthor('')
     setUrl('')
@@ -91,6 +114,7 @@ const App = () => {
   if (user === null) {
     return (
       <div>
+        <Notification message={message} messageCategory={messageCategory} />
         <h2>Log in to blog application</h2>
         {loginForm()}
       </div>
@@ -98,6 +122,7 @@ const App = () => {
   } else {
     return (
       <div>
+        <Notification message={message} messageCategory={messageCategory} />
         <h2>blogs</h2>
         <p>{user.name} is logged in</p>
         
