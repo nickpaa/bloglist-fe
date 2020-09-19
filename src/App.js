@@ -113,6 +113,11 @@ const App = () => {
     // setBlogs(blogs.map(b => b.id === id ? { ...blog, likes: blog.likes + 1 } : b))
   }
 
+  // compare function for sorting
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Description
+  // if function < 0, first ele sorts before second
+  const byLikes = (b1, b2) => b2.likes - b1.likes
+
   return (
     <div>
       <h1>Blog application</h1>
@@ -131,7 +136,7 @@ const App = () => {
 
       <h2>List of blogs</h2>
       <div>
-        {blogs.map(blog =>
+        {blogs.sort(byLikes).map(blog =>
           <Blog key={blog.id} blog={blog} handleLike={() => handleLike(blog.id)} /> 
         )}
       </div>
