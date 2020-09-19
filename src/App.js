@@ -118,6 +118,15 @@ const App = () => {
   // if function < 0, first ele sorts before second
   const byLikes = (b1, b2) => b2.likes - b1.likes
 
+  const handleDelete = async (id) => {
+    const blog = blogs.find(b => b.id === id)
+    const ok = window.confirm(`delete "${blog.title}"?`)
+    if (ok) {
+      await blogService.remove(id)
+      setBlogs(blogs.filter(b => b.id !== id))
+    }
+  }
+
   return (
     <div>
       <h1>Blog application</h1>
@@ -137,7 +146,12 @@ const App = () => {
       <h2>List of blogs</h2>
       <div>
         {blogs.sort(byLikes).map(blog =>
-          <Blog key={blog.id} blog={blog} handleLike={() => handleLike(blog.id)} /> 
+          <Blog key={blog.id} 
+            blog={blog} 
+            handleLike={() => handleLike(blog.id)} 
+            handleDelete={() => handleDelete(blog.id)}
+            own={user ? user.username === blog.user.username : false}
+          /> 
         )}
       </div>
     </div>
