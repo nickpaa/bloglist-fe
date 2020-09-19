@@ -104,6 +104,15 @@ const App = () => {
     </Togglable>
   )
 
+  const handleLike = async (id) => {
+    const blog = blogs.find(b => b.id === id)
+    const updatedBlog = {...blog, likes: blog.likes + 1, user: blog.user.id}
+    const returnedBlog = await blogService.update(id, updatedBlog)
+    // await blogService.update(id, updatedBlog)
+    setBlogs(blogs.map(b => b.id === id ? returnedBlog : b))
+    // setBlogs(blogs.map(b => b.id === id ? { ...blog, likes: blog.likes + 1 } : b))
+  }
+
   return (
     <div>
       <h1>Blog application</h1>
@@ -123,7 +132,7 @@ const App = () => {
       <h2>List of blogs</h2>
       <div>
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} /> 
+          <Blog key={blog.id} blog={blog} handleLike={() => handleLike(blog.id)} /> 
         )}
       </div>
     </div>
