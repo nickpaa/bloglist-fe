@@ -18,7 +18,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const App = () => {
       setMessage(`${user.name} successfully logged in`)
       setMessageCategory('success')
       clearMessage()
-      
+
     } catch (exception) {
       setMessage('incorrect credentials; please try again')
       setMessageCategory('error')
@@ -80,7 +80,7 @@ const App = () => {
 
   const loginForm = () => (
     <Togglable buttonLabel="log in">
-      <LoginForm 
+      <LoginForm
         username={username}
         password={password}
         handleUsernameChange={({ target }) => setUsername(target.value)}
@@ -106,7 +106,7 @@ const App = () => {
 
   const handleLike = async (id) => {
     const blog = blogs.find(b => b.id === id)
-    const updatedBlog = {...blog, likes: blog.likes + 1, user: blog.user.id}
+    const updatedBlog = { ...blog, likes: blog.likes + 1, user: blog.user.id }
     const returnedBlog = await blogService.update(id, updatedBlog)
     // await blogService.update(id, updatedBlog)
     setBlogs(blogs.map(b => b.id === id ? returnedBlog : b))
@@ -135,23 +135,23 @@ const App = () => {
       {user === null
         ? loginForm()
         : <div>
-            <p>{user.name} is logged in</p>
-            <form onSubmit={handleLogout}>
-              <button type="submit">log out</button>
-            </form>
-            {blogForm()}
-          </div>
+          <p>{user.name} is logged in</p>
+          <form onSubmit={handleLogout}>
+            <button type="submit">log out</button>
+          </form>
+          {blogForm()}
+        </div>
       }
 
       <h2>List of blogs</h2>
       <div>
         {blogs.sort(byLikes).map(blog =>
-          <Blog key={blog.id} 
-            blog={blog} 
-            handleLike={() => handleLike(blog.id)} 
+          <Blog key={blog.id}
+            blog={blog}
+            handleLike={() => handleLike(blog.id)}
             handleDelete={() => handleDelete(blog.id)}
             own={user ? user.username === blog.user.username : false}
-          /> 
+          />
         )}
       </div>
     </div>

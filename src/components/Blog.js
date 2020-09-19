@@ -40,7 +40,7 @@ const Blog = ({ blog, handleLike, handleDelete, own }) => {
   } else {
     return (
       <div style={blogStyle}>
-        {blog.title} 
+        {blog.title}
         <button onClick={toggleDisplay}>view</button>
       </div>
     )
