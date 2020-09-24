@@ -18,14 +18,14 @@ const Blog = ({ blog, handleLike, handleDelete, own }) => {
   if (visible) {
     return (
       <div style={blogStyle}>
-        <div>
+        <div className="titleAuthor">
           {blog.title} by {blog.author}
           <button onClick={toggleDisplay}>hide</button>
         </div>
-        <div>
+        <div className="url">
           {blog.url}
         </div>
-        <div>
+        <div className="likes">
           Likes: {blog.likes}
           <button onClick={handleLike}>like</button>
         </div>
@@ -39,8 +39,8 @@ const Blog = ({ blog, handleLike, handleDelete, own }) => {
     )
   } else {
     return (
-      <div style={blogStyle}>
-        {blog.title}
+      <div style={blogStyle} className="titleAuthor">
+        {blog.title} by {blog.author}
         <button onClick={toggleDisplay}>view</button>
       </div>
     )
